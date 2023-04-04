@@ -108,6 +108,7 @@ class ChatPage extends StatelessWidget {
       children: [
         header(),
         content(),
+        // emptyChat(),
       ],
     );
   }

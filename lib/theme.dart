@@ -17,7 +17,7 @@ TextStyle putihTextStyle = GoogleFonts.poppins(
 );
 
 TextStyle ijo1TextStyle = GoogleFonts.poppins(
-  color: bg2greenColor,
+  color: bggreenColor,
 );
 
 TextStyle tulisanRP = GoogleFonts.poppins(
