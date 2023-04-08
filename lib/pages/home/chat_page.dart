@@ -17,7 +17,7 @@ class ChatPage extends StatelessWidget {
           'Konsultasi Produk',
           style: putihTextStyle.copyWith(
             fontSize: 18,
-            fontWeight: medium,
+            fontWeight: bold,
           ),
         ),
         elevation: 0,
