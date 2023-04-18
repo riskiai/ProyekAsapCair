@@ -5,7 +5,6 @@ import 'package:proyek3_flutter/pages/home/profile_page.dart';
 import 'package:proyek3_flutter/pages/home/wishlist_page.dart';
 import 'package:proyek3_flutter/theme.dart';
 
-
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
@@ -22,7 +21,9 @@ class _MainPageState extends State<MainPage> {
     /* Membuat Widget */
     Widget cartButton() {
       return FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/cart');
+        },
         backgroundColor: bg2greenColor,
         child: Image.asset(
           'assets/icon_cart.png',
