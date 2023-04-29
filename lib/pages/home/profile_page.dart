@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proyek3_flutter/models/user_model.dart';
+import 'package:proyek3_flutter/pages/widgets/product_card.dart';
+import 'package:proyek3_flutter/pages/widgets/product_title.dart';
+import 'package:proyek3_flutter/providers/auth_provider.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
+
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
+
+
     Widget header() {
       return AppBar(
         backgroundColor: bg3greenColor,
@@ -32,14 +42,14 @@ class ProfilePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Hallo, Riski',
+                        'Hallo, ${user.name}',
                         style: tulisanRP.copyWith(
                           fontSize: 22,
                           fontWeight: semiBold,
                         ),
                       ),
                       Text(
-                        '@riskiailham',
+                        '@${user.username}',
                         style: tulisanRP.copyWith(
                           fontSize: 16,
                         ),

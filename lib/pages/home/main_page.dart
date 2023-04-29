@@ -6,7 +6,7 @@ import 'package:proyek3_flutter/pages/home/wishlist_page.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  
 
   @override
   State<MainPage> createState() => _MainPageState();

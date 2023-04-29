@@ -3,8 +3,7 @@ import 'package:proyek3_flutter/pages/widgets/chat_bubble.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class DetailChatPage extends StatelessWidget {
-  const DetailChatPage({super.key});
-
+ 
   @override
   Widget build(BuildContext context) {
     PreferredSize header() {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class ProductTitle extends StatelessWidget {
-  const ProductTitle({super.key});
+  
 
   @override
   Widget build(BuildContext context) {

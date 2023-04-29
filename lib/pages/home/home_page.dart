@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proyek3_flutter/models/user_model.dart';
 import 'package:proyek3_flutter/pages/widgets/product_card.dart';
 import 'package:proyek3_flutter/pages/widgets/product_title.dart';
+import 'package:proyek3_flutter/providers/auth_provider.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
+
     /* Beberapa Inisiasi Widget */
     Widget header() {
       return Container(
@@ -23,14 +27,14 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hallo, Riski',
+                    'Hallo, ${user.name}',
                     style: ijo1TextStyle.copyWith(
                       fontSize: 24,
                       fontWeight: bold,
                     ),
                   ),
                   Text(
-                    '@riskiailham',
+                    '@${user.username}',
                     style: tulisanumumkhusus.copyWith(
                       fontSize: 16,
                     ),
@@ -47,6 +51,9 @@ class HomePage extends StatelessWidget {
                   image: AssetImage(
                     'assets/image_profile.png',
                   ),
+                  //  image: NetworkImage(
+                  //   user.profilePhotoUrl,
+                  // ),
                 ),
               ),
             ),
@@ -195,9 +202,9 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             ProductTitle(),
-             ProductTitle(),
-              ProductTitle(),
-               ProductTitle(),
+            ProductTitle(),
+            ProductTitle(),
+            ProductTitle(),
           ],
         ),
       );

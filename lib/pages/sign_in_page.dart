@@ -1,12 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:proyek3_flutter/pages/widgets/loading_button.dart';
 import 'package:proyek3_flutter/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:proyek3_flutter/providers/auth_provider.dart';
 
-class SignInPage extends StatelessWidget {
-  const SignInPage({super.key});
+class SignInPage extends StatefulWidget {
+  
+
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+
+  TextEditingController emailController = TextEditingController(text: '');
+
+  TextEditingController passwordController = TextEditingController(text: '');
+
+  bool isLoading = false;
+
 
   @override
   Widget build(BuildContext context) {
     /* Membuat Beberapa Widget */
+
+     AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    handleSignIn() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (await authProvider.login(
+        email: emailController.text,
+        password: passwordController.text,
+      )) {
+        Navigator.pushNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: alertColor,
+            content: Text(
+              'Gagal Login',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
 
     Widget header() {
       return Container(
@@ -71,6 +116,7 @@ class SignInPage extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         style: tulisanumumkhusus,
+                        controller: emailController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukan Email Anda',
                           hintStyle: tulisanumumkhusus,
@@ -125,6 +171,7 @@ class SignInPage extends StatelessWidget {
                       child: TextFormField(
                         style: tulisanumumkhusus,
                         obscureText: true,
+                        controller: passwordController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukan Password Anda',
                           hintStyle: tulisanumumkhusus,
@@ -146,9 +193,7 @@ class SignInPage extends StatelessWidget {
         width: double.infinity,
         margin: EdgeInsets.only(top: 40),
         child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
-          },
+          onPressed: handleSignIn,
           style: TextButton.styleFrom(
             backgroundColor: bg3greenColor,
             shape: RoundedRectangleBorder(
@@ -205,7 +250,7 @@ class SignInPage extends StatelessWidget {
               header(),
               emailInput(),
               passwordInput(),
-              signInBuutton(),
+              isLoading ? LoadingButton() : signInBuutton(),
               Spacer(),
               footer(),
             ],

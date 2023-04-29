@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proyek3_flutter/models/user_model.dart';
+import 'package:proyek3_flutter/pages/widgets/product_card.dart';
+import 'package:proyek3_flutter/pages/widgets/product_title.dart';
+import 'package:proyek3_flutter/providers/auth_provider.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class EditProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
+
     AppBar header() {
       return AppBar(
         leading: IconButton(
@@ -46,7 +54,7 @@ class EditProfilePage extends StatelessWidget {
             TextFormField(
               style: tulisanumumkhusus,
               decoration: InputDecoration(
-                hintText: 'Riski Ahmad Ilham',
+                hintText: user.name,
                 hintStyle: tulisanumumkhusus,
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -78,7 +86,7 @@ class EditProfilePage extends StatelessWidget {
             TextFormField(
               style: tulisanumumkhusus,
               decoration: InputDecoration(
-                hintText: '@riskiailham',
+                hintText: '@${user.username}',
                 hintStyle: tulisanumumkhusus,
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -92,7 +100,7 @@ class EditProfilePage extends StatelessWidget {
       );
     }
 
-     Widget emailInput() {
+    Widget emailInput() {
       return Container(
         margin: EdgeInsets.only(
           top: 30,
@@ -110,7 +118,7 @@ class EditProfilePage extends StatelessWidget {
             TextFormField(
               style: tulisanumumkhusus,
               decoration: InputDecoration(
-                hintText: 'riskiahmadilham@gmail.com',
+                hintText: user.email,
                 hintStyle: tulisanumumkhusus,
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(

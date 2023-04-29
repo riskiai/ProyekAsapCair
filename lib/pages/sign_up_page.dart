@@ -1,13 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proyek3_flutter/pages/widgets/loading_button.dart';
+import 'package:proyek3_flutter/providers/auth_provider.dart';
 import 'package:proyek3_flutter/theme.dart';
 
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({super.key});
+class SignUpPage extends StatefulWidget {
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  TextEditingController nameController = TextEditingController(text: '');
+
+  TextEditingController usernameController = TextEditingController(text: '');
+
+  TextEditingController emailController = TextEditingController(text: '');
+
+  TextEditingController passwordController = TextEditingController(text: '');
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    /* Membuat Beberapa Widget */
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
+    handleSignUp() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (await authProvider.register(
+        name: nameController.text,
+        username: usernameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+      )) {
+        Navigator.pushNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: alertColor,
+            content: Text(
+              'Gagal Register',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
+    /* Membuat Beberapa Widget */
     Widget header() {
       return Container(
         margin: EdgeInsets.only(top: 30),
@@ -71,6 +117,7 @@ class SignUpPage extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         style: tulisanumumkhusus,
+                        controller: nameController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukan Nama Lengkap',
                           hintStyle: tulisanumumkhusus,
@@ -124,6 +171,7 @@ class SignUpPage extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         style: tulisanumumkhusus,
+                        controller: usernameController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukan Username Anda',
                           hintStyle: tulisanumumkhusus,
@@ -177,6 +225,7 @@ class SignUpPage extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         style: tulisanumumkhusus,
+                        controller: emailController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukan Email Anda',
                           hintStyle: tulisanumumkhusus,
@@ -231,6 +280,7 @@ class SignUpPage extends StatelessWidget {
                       child: TextFormField(
                         style: tulisanumumkhusus,
                         obscureText: true,
+                        controller: passwordController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukan Password Anda',
                           hintStyle: tulisanumumkhusus,
@@ -252,9 +302,7 @@ class SignUpPage extends StatelessWidget {
         width: double.infinity,
         margin: EdgeInsets.only(top: 40),
         child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
-          },
+          onPressed: handleSignUp,
           style: TextButton.styleFrom(
             backgroundColor: bg3greenColor,
             shape: RoundedRectangleBorder(
@@ -313,7 +361,7 @@ class SignUpPage extends StatelessWidget {
               usernameInput(),
               emailInput(),
               passwordInput(),
-              signInBuutton(),
+              isLoading ? LoadingButton() : signInBuutton(),
               Spacer(),
               footer(),
             ],
