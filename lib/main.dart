@@ -11,6 +11,7 @@ import 'package:proyek3_flutter/pages/product_page.dart';
 import 'package:proyek3_flutter/pages/sign_in_page.dart';
 import 'package:proyek3_flutter/pages/sign_up_page.dart';
 import 'package:proyek3_flutter/providers/auth_provider.dart';
+import 'package:proyek3_flutter/providers/product_provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,6 +22,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProductProvider(),
         ),
       ],
       child: MaterialApp(

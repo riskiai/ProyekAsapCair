@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:proyek3_flutter/models/product_model.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class ProductTitle extends StatelessWidget {
+  final ProductModel product;
+  ProductTitle(this.product);
   
 
   @override
@@ -12,6 +15,8 @@ class ProductTitle extends StatelessWidget {
       },
       child: Container(
         // padding: EdgeInsets.symmetric(
+        // width: 215,
+        // height: 215,
         //   horizontal: 12,
         //   vertical: 10,
         // ),
@@ -22,19 +27,29 @@ class ProductTitle extends StatelessWidget {
           // right: defaultMargin,
           bottom: defaultMargin,
         ),
+        
         // decoration: BoxDecoration(
         //   borderRadius: BorderRadius.circular(20),
         //   color: bg3greenColor,
         // ),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                'assets/item1.png',
-                width: 170,
-                height: 170,
-                fit: BoxFit.cover,
+            Container(
+                // padding: EdgeInsets.all(10),
+                // margin: EdgeInsets.all(20),
+                margin: EdgeInsets.only(left: 20),
+                decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: bg3greenColor,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  'http://192.168.113.189:8000/${product.galleries[0].url}',
+                  width: 100,
+                  height: 120,
+                  // fit: BoxFit.cover,
+                ),
               ),
             ),
             SizedBox(
@@ -45,7 +60,7 @@ class ProductTitle extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Umum',
+                    product.category.name,
                     style: tulisanumumkhusus.copyWith(
                       fontSize: 12,
                       fontWeight: bold,
@@ -55,17 +70,18 @@ class ProductTitle extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    'Asap Cair Luka',
+                    product.name,
                     style: ijo1TextStyle.copyWith(
-                      fontSize: 18,
+                      fontSize: 15,
                       fontWeight: bold,
                     ),
+                    maxLines: 1,
                   ),
                   SizedBox(
                     height: 6,
                   ),
                   Text(
-                    'Rp. 20000',
+                     '\Rp ${product.price}',
                     style: ijo1TextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: bold,

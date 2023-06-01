@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proyek3_flutter/providers/product_provider.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class AwalanPage extends StatefulWidget {
@@ -14,12 +16,16 @@ class _AwalanPageState extends State<AwalanPage> {
   void initState() {
     // TODO: implement initState
 
-    Timer(
-      Duration(seconds: 3),
-      () => Navigator.pushNamed(context, '/sign-in'),
-    );
+    // bikin function baru
+    getInit();
 
     super.initState();
+  }
+
+  /* Memanggil Function */
+  getInit() async {
+    await Provider.of<ProductProvider>(context, listen: false).getProducts();
+    Navigator.pushNamed(context, '/sign-in');
   }
 
   @override

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:proyek3_flutter/models/product_model.dart';
 import 'package:proyek3_flutter/theme.dart';
 
+
 class ProductCard extends StatelessWidget {
-  
+  final ProductModel product;
+  ProductCard(this.product);
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +34,10 @@ class ProductCard extends StatelessWidget {
                 horizontal: 12,
                 vertical: 10,
               ),
-              child: Image.asset(
-                'assets/image_obat.png',
-                width: 190,
+              child: Image.network(
+                // 'assets/image_obat.png',
+                'http://192.168.113.189:8000/${product.galleries[0].url}',
+                width: 270,
                 height: 160,
                 // height: 150,
               ),
@@ -44,21 +48,22 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Khusus',
+                    product.category.name,
                     style: putihTextStyle.copyWith(
                       fontSize: 12,
                     ),
                   ),
                   Text(
-                    'Asap Cair Hama',
+                    product.name,
                     style: ijo1TextStyle.copyWith(
                       fontSize: 15,
                       fontWeight: semiBold,
                     ),
                     overflow: TextOverflow.ellipsis,
+                    // maxLines: 1,
                   ),
                   Text(
-                    'Rp. 25000',
+                    '\Rp ${product.price}',
                     style: ijo1TextStyle.copyWith(
                       fontSize: 14,
                       fontWeight: medium,

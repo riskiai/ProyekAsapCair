@@ -4,13 +4,17 @@ import 'package:proyek3_flutter/models/user_model.dart';
 import 'package:proyek3_flutter/pages/widgets/product_card.dart';
 import 'package:proyek3_flutter/pages/widgets/product_title.dart';
 import 'package:proyek3_flutter/providers/auth_provider.dart';
+import 'package:proyek3_flutter/providers/product_provider.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    /* Inisiasi Nama Functionnya dulu Di Provider */
+
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModel user = authProvider.user;
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
 
     /* Beberapa Inisiasi Widget */
     Widget header() {
@@ -164,12 +168,11 @@ class HomePage extends StatelessWidget {
                 width: defaultMargin,
               ),
               Row(
-                children: [
-                  ProductCard(),
-                  ProductCard(),
-                  ProductCard(),
-                  ProductCard(),
-                ],
+                children: productProvider.products
+                    .map(
+                      (product) => ProductCard(product),
+                    )
+                    .toList(),
               ),
             ],
           ),
@@ -200,12 +203,7 @@ class HomePage extends StatelessWidget {
           top: 14,
         ),
         child: Column(
-          children: [
-            ProductTitle(),
-            ProductTitle(),
-            ProductTitle(),
-            ProductTitle(),
-          ],
+          children: productProvider.products.map((product) => ProductTitle(product)).toList(),
         ),
       );
     }

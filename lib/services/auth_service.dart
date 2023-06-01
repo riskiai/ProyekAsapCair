@@ -4,11 +4,16 @@ import 'package:proyek3_flutter/models/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  String baseUrl = 'https://shamo-backend.buildwithangga.id/api';
+  String baseUrl = 'http://192.168.113.189:8000/api';
 
+  /* Menggunakan metode asycronus */
   // register
-  Future<UserModel> register(
-      {String name, String username, String email, String password}) async {
+  Future<UserModel> register({
+    String name,
+    String username,
+    String email,
+    String password,
+  }) async {
     var url = '$baseUrl/register';
     var headers = {'Content-Type': 'application/json'};
     var body = jsonEncode({
@@ -16,6 +21,7 @@ class AuthService {
       'username': username,
       'email': email,
       'password': password,
+      // 'phone': phone,
     });
 
     var response = await http.post(
@@ -38,8 +44,10 @@ class AuthService {
   }
 
   // LOGIN
-  Future<UserModel> login(
-      {String email, String password,}) async {
+  Future<UserModel> login({
+    String email,
+    String password,
+  }) async {
     var url = '$baseUrl/login';
     var headers = {'Content-Type': 'application/json'};
     var body = jsonEncode({
@@ -54,7 +62,7 @@ class AuthService {
     );
 
     print(response.body);
-
+    // Map<String, dynamic> user = Map<String, dynamic>();
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body)['data'];
       UserModel user = UserModel.fromJson(data['user']);

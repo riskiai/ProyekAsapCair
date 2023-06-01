@@ -18,6 +18,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   TextEditingController passwordController = TextEditingController(text: '');
 
+  // TextEditingController phoneController = TextEditingController(text: '');
+
   bool isLoading = false;
 
   @override
@@ -34,6 +36,7 @@ class _SignUpPageState extends State<SignUpPage> {
         username: usernameController.text,
         email: emailController.text,
         password: passwordController.text,
+        // phone: phoneController.text,
       )) {
         Navigator.pushNamed(context, '/home');
       } else {
@@ -241,6 +244,61 @@ class _SignUpPageState extends State<SignUpPage> {
       );
     }
 
+
+    // Widget phoneInput() {
+    //   return Container(
+    //     margin: EdgeInsets.only(top: 20),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'Phone ',
+    //           style: ijo1TextStyle.copyWith(
+    //             fontSize: 17,
+    //             fontWeight: semiBold,
+    //           ),
+    //         ),
+    //         SizedBox(
+    //           height: 12,
+    //         ),
+    //         Container(
+    //           height: 55,
+    //           padding: EdgeInsets.symmetric(
+    //             horizontal: 16,
+    //           ),
+    //           decoration: BoxDecoration(
+    //             color: bg2greenColor,
+    //             borderRadius: BorderRadius.circular(12),
+    //           ),
+    //           child: Center(
+    //             child: Row(
+    //               children: [
+    //                 Image.asset(
+    //                   'assets/icon_email.png',
+    //                   width: 23,
+    //                 ),
+    //                 SizedBox(
+    //                   width: 16,
+    //                 ),
+    //                 Expanded(
+    //                   child: TextFormField(
+    //                     style: tulisanumumkhusus,
+    //                     controller: phoneController,
+    //                     decoration: InputDecoration.collapsed(
+    //                       hintText: 'Masukan Phone Anda',
+    //                       hintStyle: tulisanumumkhusus,
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
+
     Widget passwordInput() {
       return Container(
         margin: EdgeInsets.only(top: 25),
@@ -354,13 +412,16 @@ class _SignUpPageState extends State<SignUpPage> {
             horizontal: defaultMargin,
           ),
           child: Column(
+            
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               header(),
               nameInput(),
               usernameInput(),
               emailInput(),
+              // phoneInput(),
               passwordInput(),
+              
               isLoading ? LoadingButton() : signInBuutton(),
               Spacer(),
               footer(),
