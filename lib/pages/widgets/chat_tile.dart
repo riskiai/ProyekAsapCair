@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:proyek3_flutter/models/message_model.dart';
+import 'package:proyek3_flutter/models/product_model.dart';
+import 'package:proyek3_flutter/pages/detail_chat_page.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class ChatTile extends StatelessWidget {
-  
+  final MessageModel message;
+  ChatTile(this.message);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/detail-chat');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailChatPage(
+              UninitializedProductModel(),
+            ),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(top: 33),
@@ -33,7 +45,7 @@ class ChatTile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Ada Yang Bisa Kami Bantu ? Yuk Konsultasikan Permasalahan Kamu Dengan Obat Asap Cair Semoga Membantu',
+                        message.message,
                         style: ijo1TextStyle.copyWith(fontWeight: light),
                         overflow: TextOverflow.ellipsis,
                       ),

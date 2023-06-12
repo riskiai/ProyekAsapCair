@@ -1,8 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proyek3_flutter/pages/detail_chat_page.dart';
+import 'package:proyek3_flutter/providers/cart_provider.dart';
+import 'package:proyek3_flutter/providers/wishlist_provider.dart';
 import 'package:proyek3_flutter/theme.dart';
+import 'package:proyek3_flutter/models/product_model.dart';
 
 class ProductPage extends StatefulWidget {
+  /* Membuat Product Page */
+  final ProductModel product;
+  ProductPage(this.product);
+
   @override
   State<ProductPage> createState() => _ProductPageState();
 }
@@ -16,23 +25,29 @@ class _ProductPageState extends State<ProductPage> {
 
   List produkasapcair = [
     'assets/kotak.png',
+    'assets/kotak2.png',
     'assets/kotak.png',
+    'assets/kotak2.png',
     'assets/kotak.png',
+    'assets/kotak2.png',
     'assets/kotak.png',
+    'assets/kotak2.png',
     'assets/kotak.png',
-    'assets/kotak.png',
-    'assets/kotak.png',
-    'assets/kotak.png',
-    'assets/kotak.png',
-    'assets/kotak.png',
+    'assets/kotak2.png',
   ];
 
   /* VARIABLE LOGIC */
   int currentIndex = 0;
-  bool isWishlist = false;
+  // bool isWishlist = false;
 
   @override
   Widget build(BuildContext context) {
+    /* Untuk Provider */
+    WishlistProvider wishlistProvider = Provider.of<WishlistProvider>(context);
+
+    /* Membuat Cart Provider */
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
+
     /* UNTUK ICON */
     Future<void> showSuccesDialog() async {
       return showDialog(
@@ -87,7 +102,9 @@ class _ProductPageState extends State<ProductPage> {
                           width: 170,
                           height: 44,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/cart');
+                            },
                             style: TextButton.styleFrom(
                                 backgroundColor: bg3greenColor,
                                 shape: RoundedRectangleBorder(
@@ -170,10 +187,10 @@ class _ProductPageState extends State<ProductPage> {
 
           /* Membuat Slide Image */
           CarouselSlider(
-            items: images
+            items: widget.product.galleries
                 .map(
-                  (image) => Image.asset(
-                    image,
+                  (image) => Image.network(
+                    'http://192.168.130.189:8000/${image.url}',
                     width: 500,
                   ),
                 )
@@ -189,7 +206,7 @@ class _ProductPageState extends State<ProductPage> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: images.map((e) {
+            children: widget.product.galleries.map((e) {
               index++;
               return indicator(index);
             }).toList(),
@@ -226,14 +243,14 @@ class _ProductPageState extends State<ProductPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Asap Cair Hama',
+                          widget.product.name,
                           style: putihTextStyle.copyWith(
                             fontSize: 16,
                             fontWeight: semiBold,
                           ),
                         ),
                         Text(
-                          'Khusus',
+                          widget.product.category.name,
                           style: putihTextStyle.copyWith(fontSize: 12),
                         )
                       ],
@@ -241,11 +258,13 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        isWishlist = !isWishlist;
-                      });
+                      // setState(() {
+                      //   isWishlist = !isWishlist;
+                      // });
 
-                      if (isWishlist) {
+                      wishlistProvider.setProduct(widget.product);
+
+                      if (wishlistProvider.isWishlist(widget.product)) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: bg2greenColor,
@@ -268,7 +287,7 @@ class _ProductPageState extends State<ProductPage> {
                       }
                     },
                     child: Image.asset(
-                      isWishlist
+                      wishlistProvider.isWishlist(widget.product)
                           ? 'assets/button_love_putih.png'
                           : 'assets/button_wishlist.png',
                       width: 46,
@@ -300,7 +319,7 @@ class _ProductPageState extends State<ProductPage> {
                     style: putihTextStyle,
                   ),
                   Text(
-                    '\Rp.25000',
+                    '\Rp ${widget.product.price}',
                     style: tulisanRP.copyWith(
                       fontSize: 15,
                       fontWeight: bold,
@@ -329,7 +348,7 @@ class _ProductPageState extends State<ProductPage> {
                     height: 12,
                   ),
                   Text(
-                    'Asap Cair Hama digunakan untuk meningkatkan kualitas tanah dan menetralisir asam tanah, membunuh hama tanaman dan mengontrol pertumbuhan tanaman, pengusir serangga dan cocok bagi para petani.',
+                    widget.product.description,
                     style: putihTextStyle.copyWith(
                       fontWeight: light,
                     ),
@@ -384,7 +403,12 @@ class _ProductPageState extends State<ProductPage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/detail-chat');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailChatPage(widget.product),
+                        ),
+                      );
                     },
                     child: Container(
                       width: 54,
@@ -406,6 +430,7 @@ class _ProductPageState extends State<ProductPage> {
                       height: 54,
                       child: TextButton(
                         onPressed: () {
+                          cartProvider.addCart(widget.product);
                           showSuccesDialog();
                         },
                         style: TextButton.styleFrom(

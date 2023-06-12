@@ -21,6 +21,7 @@ class _SignUpPageState extends State<SignUpPage> {
   // TextEditingController phoneController = TextEditingController(text: '');
 
   bool isLoading = false;
+   bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +174,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     Expanded(
                       child: TextFormField(
+                        autofocus: true,
                         style: tulisanumumkhusus,
                         controller: usernameController,
                         decoration: InputDecoration.collapsed(
@@ -227,6 +229,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     Expanded(
                       child: TextFormField(
+                        autofocus: true,
                         style: tulisanumumkhusus,
                         controller: emailController,
                         decoration: InputDecoration.collapsed(
@@ -336,14 +339,28 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     Expanded(
                       child: TextFormField(
+                        autofocus: true,
                         style: tulisanumumkhusus,
-                        obscureText: true,
+                        obscureText: !_isPasswordVisible,
                         controller: passwordController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukan Password Anda',
                           hintStyle: tulisanumumkhusus,
                         ),
                       ),
+                    ),
+                     IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Color(0xff008037),
+                    ),
+                    onPressed: (){
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                      },
                     ),
                   ],
                 ),

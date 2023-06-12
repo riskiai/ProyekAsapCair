@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:proyek3_flutter/models/product_model.dart';
+import 'package:proyek3_flutter/pages/product_page.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class ProductTitle extends StatelessWidget {
   final ProductModel product;
   ProductTitle(this.product);
-  
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductPage(product),
+          ),
+        );
       },
       child: Container(
         // padding: EdgeInsets.symmetric(
@@ -27,7 +32,7 @@ class ProductTitle extends StatelessWidget {
           // right: defaultMargin,
           bottom: defaultMargin,
         ),
-        
+
         // decoration: BoxDecoration(
         //   borderRadius: BorderRadius.circular(20),
         //   color: bg3greenColor,
@@ -35,19 +40,19 @@ class ProductTitle extends StatelessWidget {
         child: Row(
           children: [
             Container(
-                // padding: EdgeInsets.all(10),
-                // margin: EdgeInsets.all(20),
-                margin: EdgeInsets.only(left: 20),
-                decoration: BoxDecoration(
+              // padding: EdgeInsets.all(10),
+              // margin: EdgeInsets.all(20),
+              margin: EdgeInsets.only(left: 20),
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: bg3greenColor,
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
-                  'http://192.168.113.189:8000/${product.galleries[0].url}',
-                  width: 100,
-                  height: 120,
+                  'http://192.168.130.189:8000/${product.galleries[0].url}',
+                  width: 130,
+                  height: 150,
                   // fit: BoxFit.cover,
                 ),
               ),
@@ -62,7 +67,7 @@ class ProductTitle extends StatelessWidget {
                   Text(
                     product.category.name,
                     style: tulisanumumkhusus.copyWith(
-                      fontSize: 12,
+                      fontSize: 15,
                       fontWeight: bold,
                     ),
                   ),
@@ -72,7 +77,7 @@ class ProductTitle extends StatelessWidget {
                   Text(
                     product.name,
                     style: ijo1TextStyle.copyWith(
-                      fontSize: 15,
+                      fontSize: 17,
                       fontWeight: bold,
                     ),
                     maxLines: 1,
@@ -81,7 +86,7 @@ class ProductTitle extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                     '\Rp ${product.price}',
+                    '\Rp ${product.price}',
                     style: ijo1TextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: bold,

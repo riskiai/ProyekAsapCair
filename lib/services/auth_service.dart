@@ -4,7 +4,7 @@ import 'package:proyek3_flutter/models/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  String baseUrl = 'http://192.168.113.189:8000/api';
+  String baseUrl = 'http://192.168.130.189:8000/api';
 
   /* Menggunakan metode asycronus */
   // register

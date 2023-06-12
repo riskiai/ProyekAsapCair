@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:proyek3_flutter/pages/home/home_page.dart';
 import 'package:proyek3_flutter/pages/home/chat_page.dart';
 import 'package:proyek3_flutter/pages/home/profile_page.dart';
 import 'package:proyek3_flutter/pages/home/wishlist_page.dart';
+import 'package:proyek3_flutter/providers/page_provider.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class MainPage extends StatefulWidget {
-  
-
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
   /* Membuat Variable Baru */
-  int currentIndex = 0;
+  // int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    PageProvider pageProvider = Provider.of<PageProvider>(context);
+
     /* Membuat Widget */
     Widget cartButton() {
       return FloatingActionButton(
@@ -44,12 +46,13 @@ class _MainPageState extends State<MainPage> {
           clipBehavior: Clip.antiAlias,
           child: BottomNavigationBar(
             backgroundColor: bg3greenColor,
-            currentIndex: currentIndex,
+            currentIndex: pageProvider.currentIndex,
             onTap: (value) {
               print(value);
-              setState(() {
-                currentIndex = value;
-              });
+              // setState(() {
+              //   currentIndex = value;
+              // });
+              pageProvider.currentIndex = value;
             },
             type: BottomNavigationBarType.fixed,
             items: [
@@ -63,7 +66,7 @@ class _MainPageState extends State<MainPage> {
                     'assets/icon_home.png',
                     width: 25,
                     color:
-                        currentIndex == 0 ? Color(0xffC7E8CA) : bg2greenColor,
+                        pageProvider.currentIndex == 0 ? Color(0xffC7E8CA) : bg2greenColor,
                   ),
                 ),
                 label: '',
@@ -79,7 +82,7 @@ class _MainPageState extends State<MainPage> {
                     'assets/icon_chat.png',
                     width: 25,
                     color:
-                        currentIndex == 1 ? Color(0xffC7E8CA) : bg2greenColor,
+                        pageProvider.currentIndex  == 1 ? Color(0xffC7E8CA) : bg2greenColor,
                   ),
                 ),
                 label: '',
@@ -95,7 +98,7 @@ class _MainPageState extends State<MainPage> {
                     'assets/icon_wishlist.png',
                     width: 25,
                     color:
-                        currentIndex == 2 ? Color(0xffC7E8CA) : bg2greenColor,
+                        pageProvider.currentIndex  == 2 ? Color(0xffC7E8CA) : bg2greenColor,
                   ),
                 ),
                 label: '',
@@ -110,7 +113,7 @@ class _MainPageState extends State<MainPage> {
                     'assets/icon_profile.png',
                     width: 23,
                     color:
-                        currentIndex == 3 ? Color(0xffC7E8CA) : bg2greenColor,
+                        pageProvider.currentIndex  == 3 ? Color(0xffC7E8CA) : bg2greenColor,
                   ),
                 ),
                 label: '',
@@ -122,7 +125,7 @@ class _MainPageState extends State<MainPage> {
     }
 
     Widget body() {
-      switch (currentIndex) {
+      switch (pageProvider.currentIndex ) {
         case 0:
           return HomePage();
           break;

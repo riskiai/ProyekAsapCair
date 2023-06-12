@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:proyek3_flutter/models/product_model.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class ChatBubble extends StatelessWidget {
@@ -7,9 +8,13 @@ class ChatBubble extends StatelessWidget {
   final String text;
   final bool isSender;
   /* Melakukan pengkodisian apakah chat buble tersebut punya produk atau tidak */
-  final bool hasProduct;
+  final ProductModel product;
 
-  ChatBubble({this.isSender = false, this.text = '', this.hasProduct = false,});
+  ChatBubble({
+    this.isSender = false,
+    this.text = '',
+    this.product,
+  });
 
   @override
   /* Widget Kotak */
@@ -32,8 +37,8 @@ class ChatBubble extends StatelessWidget {
           children: [
             Row(
               children: [
-                Image.asset(
-                  'assets/item2.png',
+                Image.network(
+                  'http://192.168.130.189:8000/${product.galleries[0].url}',
                   width: 80,
                 ),
                 SizedBox(
@@ -44,14 +49,14 @@ class ChatBubble extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Asap Cair Luka',
+                        product.name,
                         style: putihTextStyle,
                       ),
                       SizedBox(
                         height: 2,
                       ),
                       Text(
-                        '\Rp.20000',
+                        '\Rp ${product.price}',
                         style: putihTextStyle.copyWith(fontWeight: medium),
                       ),
                     ],
@@ -115,7 +120,7 @@ class ChatBubble extends StatelessWidget {
             isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           /* Menampilkan data productnya */
-           hasProduct ? productPreview() : SizedBox(),
+          product is UninitializedProductModel ? SizedBox() :  productPreview(),
           Row(
             /* LOGIC PENARUHAN CHAT KOLOM */
             mainAxisAlignment:

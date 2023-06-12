@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyek3_flutter/models/product_model.dart';
 import 'package:proyek3_flutter/theme.dart';
+import 'package:proyek3_flutter/pages/product_page.dart';
 
 
 class ProductCard extends StatelessWidget {
@@ -11,7 +12,12 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductPage(product),
+          ),
+        );
       },
       child: Container(
         width: 215,
@@ -36,7 +42,7 @@ class ProductCard extends StatelessWidget {
               ),
               child: Image.network(
                 // 'assets/image_obat.png',
-                'http://192.168.113.189:8000/${product.galleries[0].url}',
+                'http://192.168.130.189:8000/${product.galleries[0].url}',
                 width: 270,
                 height: 160,
                 // height: 150,

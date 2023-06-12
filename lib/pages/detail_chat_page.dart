@@ -1,11 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proyek3_flutter/models/message_model.dart';
+import 'package:proyek3_flutter/models/product_model.dart';
 import 'package:proyek3_flutter/pages/widgets/chat_bubble.dart';
+import 'package:proyek3_flutter/providers/auth_provider.dart';
+import 'package:proyek3_flutter/services/message_service.dart';
 import 'package:proyek3_flutter/theme.dart';
 
-class DetailChatPage extends StatelessWidget {
- 
+class DetailChatPage extends StatefulWidget {
+  ProductModel product;
+  DetailChatPage(this.product);
+
+  @override
+  State<DetailChatPage> createState() => _DetailChatPageState();
+}
+
+class _DetailChatPageState extends State<DetailChatPage> {
+  /* Menambahkan controller fitur live chat di message */
+  TextEditingController messageController = TextEditingController(text: '');
+
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    handleAddMessage() async {
+      await MessageService().addMessage(
+        user: authProvider.user,
+        isFromUser: true,
+        product: widget.product,
+        message: messageController.text,
+      );
+
+      setState(() {
+        widget.product = UninitializedProductModel();
+        messageController.text = '';
+      });
+    }
+
     PreferredSize header() {
       return PreferredSize(
         preferredSize: Size.fromHeight(70),
@@ -64,8 +95,8 @@ class DetailChatPage extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              'assets/item2.png',
+            Image.network(
+              'http://192.168.130.189:8000/${widget.product.galleries[0].url}',
               width: 80,
             ),
             SizedBox(
@@ -77,7 +108,7 @@ class DetailChatPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Asap Cair Luka',
+                    widget.product.name,
                     style: putihTextStyle,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -85,7 +116,7 @@ class DetailChatPage extends StatelessWidget {
                     height: 2,
                   ),
                   Text(
-                    '\Rp.20000',
+                    '\Rp ${widget.product.price}',
                     style: putihTextStyle.copyWith(
                       fontWeight: medium,
                     ),
@@ -93,9 +124,16 @@ class DetailChatPage extends StatelessWidget {
                 ],
               ),
             ),
-            Image.asset(
-              'assets/close.png',
-              width: 28,
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  widget.product = UninitializedProductModel();
+                });
+              },
+              child: Image.asset(
+                'assets/close.png',
+                width: 28,
+              ),
             ),
           ],
         ),
@@ -103,70 +141,82 @@ class DetailChatPage extends StatelessWidget {
     }
 
     Widget chatInput() {
-      return Container(
-        margin: EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /* CHildren Tambah productpriview */
-            productPreview(),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 45,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      color: bg2greenColor,
-                      borderRadius: BorderRadius.circular(
-                        12,
+      return SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /* CHildren Tambah productpriview */
+              widget.product is UninitializedProductModel
+                  ? SizedBox()
+                  : productPreview(),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 45,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
                       ),
-                    ),
-                    child: Center(
-                      child: TextFormField(
-                        decoration: InputDecoration.collapsed(
-                            hintText: 'Tuliskan Pesan',
-                            hintStyle: putihTextStyle),
+                      decoration: BoxDecoration(
+                        color: bg2greenColor,
+                        borderRadius: BorderRadius.circular(
+                          12,
+                        ),
+                      ),
+                      child: Center(
+                        child: TextFormField(
+                          controller: messageController,
+                          style: putihTextStyle,
+                          decoration: InputDecoration.collapsed(
+                              hintText: 'Tuliskan Pesan',
+                              hintStyle: putihTextStyle),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Image.asset(
-                  'assets/button_krm.png',
-                  width: 45,
-                ),
-              ],
-            ),
-          ],
+                  SizedBox(
+                    width: 20,
+                  ),
+                  GestureDetector(
+                    onTap: handleAddMessage,
+                    child: Image.asset(
+                      'assets/button_krm.png',
+                      width: 45,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       );
     }
 
     Widget Content() {
-      return ListView(
-        padding: EdgeInsets.symmetric(
-          horizontal: defaultMargin,
-        ),
-        children: [
-          ChatBubble(
-            isSender: true,
-            text: 'Apakah Obat Asap Cair Luka Masih Ada ?',
-            /* Ketika Ingin Produk ada Harus tambahkan fungsi dari pengkodisian */
-            /// Di file [chat_buble.dart]
-            hasProduct: true,
-          ),
-           ChatBubble(
-            isSender: false,
-            text: 'Iya , Masih Ada Silahkan Pesan Sekarang',
-          ),
-        ],
-      );
+      return StreamBuilder<List<MessageModel>>(
+          stream: MessageService()
+              .getMessagesByUserId(userId: authProvider.user.id),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: defaultMargin,
+                ),
+                children: snapshot.data.map((MessageModel message) => ChatBubble(
+                  isSender: message.isFromUser,
+                  text: message.message,
+                  product: message.product,
+                )).toList(),
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          });
     }
 
     return Scaffold(

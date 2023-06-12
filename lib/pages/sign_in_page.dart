@@ -18,6 +18,8 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController passwordController = TextEditingController(text: '');
 
   bool isLoading = false;
+  bool _isPasswordVisible = false;
+  
 
 
   @override
@@ -86,6 +88,7 @@ class _SignInPageState extends State<SignInPage> {
           children: [
             Text(
               'Email ',
+              
               style: ijo1TextStyle.copyWith(
                 fontSize: 17,
                 fontWeight: semiBold,
@@ -115,6 +118,7 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     Expanded(
                       child: TextFormField(
+                        
                         style: tulisanumumkhusus,
                         controller: emailController,
                         decoration: InputDecoration.collapsed(
@@ -164,19 +168,34 @@ class _SignInPageState extends State<SignInPage> {
                       'assets/icon_password.png',
                       width: 23,
                     ),
+                    
                     SizedBox(
                       width: 16,
                     ),
                     Expanded(
                       child: TextFormField(
                         style: tulisanumumkhusus,
-                        obscureText: true,
+                        obscureText: !_isPasswordVisible,
                         controller: passwordController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukan Password Anda',
                           hintStyle: tulisanumumkhusus,
+                        
                         ),
                       ),
+                    ),
+                    IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Color(0xff008037),
+                    ),
+                    onPressed: (){
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                      },
                     ),
                   ],
                 ),

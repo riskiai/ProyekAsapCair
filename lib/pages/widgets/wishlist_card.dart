@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proyek3_flutter/models/product_model.dart';
+import 'package:proyek3_flutter/providers/wishlist_provider.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class WishlistCard extends StatelessWidget {
-  
+  final ProductModel product;
+  WishlistCard(this.product);
 
   @override
   Widget build(BuildContext context) {
+    /* Menambahkan Wislist Providernya */
+      WishlistProvider wishlistProvider = Provider.of<WishlistProvider>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.only(
@@ -20,8 +27,8 @@ class WishlistCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Image.asset(
-            'assets/image_obat.png',
+          Image.network(
+            'http://192.168.130.189:8000/${product.galleries[0].url}',
             width: 80,
           ),
           SizedBox(
@@ -32,21 +39,26 @@ class WishlistCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Asap Cair Luka',
+                  product.name,
                   style: putihTextStyle.copyWith(
                     fontWeight: semiBold,
                   ),
                 ),
                 Text(
-                  '\Rp.20000',
+                  '\Rp ${product.price}',
                   style: tulisanumumkhusus,
                 ),
               ],
             ),
           ),
-          Image.asset(
-            'assets/Love.png',
-            width: 40,
+          GestureDetector(
+            onTap: () {
+              wishlistProvider.setProduct(product);
+            },
+            child: Image.asset(
+              'assets/Love.png',
+              width: 40,
+            ),
           ),
         ],
       ),

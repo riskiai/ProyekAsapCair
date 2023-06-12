@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:proyek3_flutter/models/product_model.dart';
 
 class ProductService {
-  String baseUrl = 'http://192.168.113.189:8000/api';
+  String baseUrl = 'http://192.168.130.189:8000/api';
 
   Future<List<ProductModel>> getProducts() async {
     var url = '$baseUrl/products';

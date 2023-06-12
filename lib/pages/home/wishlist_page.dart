@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:proyek3_flutter/pages/widgets/chat_tile.dart';
 import 'package:proyek3_flutter/pages/widgets/wishlist_card.dart';
+import 'package:proyek3_flutter/providers/wishlist_provider.dart';
 import 'package:proyek3_flutter/theme.dart';
+
+import '../../providers/page_provider.dart';
 
 class WishlistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    WishlistProvider wishlistProvider = Provider.of<WishlistProvider>(context);
+    PageProvider pageProvider = Provider.of<PageProvider>(context);
+
     /* Membuat Komponen Header */
     Widget header() {
       return AppBar(
         backgroundColor: bg3greenColor,
         centerTitle: true,
         title: Text(
-          'Product Favorite',
+          'Pilihan Product Favorite',
           style: putihTextStyle.copyWith(
             fontSize: 18,
             fontWeight: bold,
@@ -34,7 +41,7 @@ class WishlistPage extends StatelessWidget {
             children: [
               Image.asset(
                 'assets/Love Icon.png',
-                width: 150,
+                width: 120,
               ),
               SizedBox(
                 height: 20,
@@ -43,7 +50,7 @@ class WishlistPage extends StatelessWidget {
                 'Temukan Obat Asap Cair Anda',
                 style: putihTextStyle.copyWith(
                   fontSize: 16,
-                  fontWeight: medium,
+                  fontWeight: bold,
                 ),
               ),
               SizedBox(
@@ -51,7 +58,9 @@ class WishlistPage extends StatelessWidget {
               ),
               Text(
                 'Terimakasih Sudah Memesan Produk Kami',
-                style: tulisanRP,
+                style: tulisanRP.copyWith(
+                  fontWeight: semiBold,
+                ),
               ),
               SizedBox(
                 height: 20,
@@ -59,7 +68,9 @@ class WishlistPage extends StatelessWidget {
               Container(
                 height: 44,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    pageProvider.currentIndex = 0;
+                  },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(
                       horizontal: 27,
@@ -93,11 +104,11 @@ class WishlistPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(
               horizontal: defaultMargin,
             ),
-            children: [
-              WishlistCard(),
-               WishlistCard(),
-                WishlistCard(),
-            ],
+            children: wishlistProvider.wishlist
+                .map(
+                  (product) => WishlistCard(product),
+                )
+                .toList(),
           ),
         ),
       );
@@ -106,7 +117,7 @@ class WishlistPage extends StatelessWidget {
     return Column(
       children: [
         header(),
-        content(),
+        wishlistProvider.wishlist.length == 0 ? emptyChat() : content(),
         // emptyChat(),
       ],
     );

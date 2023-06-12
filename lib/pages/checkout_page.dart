@@ -1,10 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:proyek3_flutter/pages/widgets/checkout_card.dart';
+import 'package:proyek3_flutter/pages/widgets/loading_button.dart';
+import 'package:proyek3_flutter/providers/auth_provider.dart';
+import 'package:proyek3_flutter/providers/cart_provider.dart';
+import 'package:proyek3_flutter/providers/transaction_provider.dart';
 import 'package:proyek3_flutter/theme.dart';
 
-class CheckoutPage extends StatelessWidget {
+class CheckoutPage extends StatefulWidget {
+  @override
+  State<CheckoutPage> createState() => _CheckoutPageState();
+}
+
+class _CheckoutPageState extends State<CheckoutPage> {
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
+    /* Menambahkan Checkout Page */
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
+    TransactionProvider transactionProvider =
+        Provider.of<TransactionProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    handleCheckout() async {
+      /* Saat dia Chechout */
+      setState(() {
+        isLoading = true;
+      });
+
+      if (await transactionProvider.checkout(
+        authProvider.user.token,
+        cartProvider.carts,
+        cartProvider.totalPrice(),
+      )) {
+        cartProvider.carts = [];
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/checkout-success', (route) => false);
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     AppBar header() {
       return AppBar(
         backgroundColor: bg3greenColor,
@@ -33,7 +72,13 @@ class CheckoutPage extends StatelessWidget {
                     fontWeight: medium,
                   ),
                 ),
-                CheckoutCard(),
+                Column(
+                  children: cartProvider.carts
+                      .map(
+                        (cart) => CheckoutCard(cart),
+                      )
+                      .toList(),
+                ),
               ],
             ),
           ),
@@ -52,7 +97,7 @@ class CheckoutPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Alamat Detail',
+                  'Informasi Pesanan',
                   style: putihTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: medium,
@@ -86,14 +131,14 @@ class CheckoutPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Store Asap Cair',
+                          'Lokasi Toko',
                           style: tulisanumumkhusus.copyWith(
                             fontSize: 13,
                             fontWeight: light,
                           ),
                         ),
                         Text(
-                          'Asap Cair Luka',
+                          'Asap Cair',
                           style: putihTextStyle.copyWith(
                             fontWeight: medium,
                           ),
@@ -102,7 +147,7 @@ class CheckoutPage extends StatelessWidget {
                           height: defaultMargin,
                         ),
                         Text(
-                          'Alamat Anda',
+                          'Alamat ',
                           style: tulisanumumkhusus.copyWith(
                             fontSize: 13,
                             fontWeight: light,
@@ -155,7 +200,7 @@ class CheckoutPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '2 Item',
+                      '${cartProvider.totalItems()} Item',
                       style: putihTextStyle.copyWith(
                         fontWeight: medium,
                       ),
@@ -169,13 +214,13 @@ class CheckoutPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Harga Total',
+                      'Total Harga Produk',
                       style: tulisanumumkhusus.copyWith(
                         fontSize: 15,
                       ),
                     ),
                     Text(
-                      '\Rp.40000',
+                      '\Rp. ${cartProvider.totalPrice()}',
                       style: putihTextStyle.copyWith(
                         fontWeight: medium,
                       ),
@@ -195,7 +240,7 @@ class CheckoutPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '\Rp.20000',
+                      '\Rp. 8000',
                       style: putihTextStyle.copyWith(
                         fontWeight: medium,
                       ),
@@ -216,13 +261,13 @@ class CheckoutPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Total',
+                      'Total Keseluruhan',
                       style: tulisanumumkhusus.copyWith(
                         fontWeight: semiBold,
                       ),
                     ),
                     Text(
-                      '\Rp.60000',
+                      '\Rp. ${cartProvider.totalPrice() + 8000}',
                       style: tulisanumumkhusus.copyWith(
                         fontWeight: semiBold,
                       ),
@@ -241,32 +286,35 @@ class CheckoutPage extends StatelessWidget {
             thickness: 1,
             color: bg3greenColor,
           ),
-          Container(
-            height: 50,
-            width: double.infinity,
-            margin: EdgeInsets.symmetric(
-              vertical: defaultMargin,
-            ),
-            child: TextButton(
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/checkout-success', (route) => false);
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: bg3greenColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          isLoading
+              ? Container(
+                  margin: EdgeInsets.only(
+                    bottom: 30,
+                  ),
+                  child: LoadingButton())
+              : Container(
+                  height: 50,
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(
+                    vertical: defaultMargin,
+                  ),
+                  child: TextButton(
+                    onPressed: handleCheckout,
+                    style: TextButton.styleFrom(
+                      backgroundColor: bg3greenColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      'Checkout Sekarang',
+                      style: putihTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: semiBold,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              child: Text(
-                'Checkout Sekarang',
-                style: putihTextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: semiBold,
-                ),
-              ),
-            ),
-          ),
         ],
       );
     }

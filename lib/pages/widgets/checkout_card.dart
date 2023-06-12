@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:proyek3_flutter/models/cart_model.dart';
 import 'package:proyek3_flutter/theme.dart';
 
 class CheckoutCard extends StatelessWidget {
-  
+  /* Menambahkan Parameter */
+  final CartModel cart;
+  CheckoutCard(this.cart);
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +27,8 @@ class CheckoutCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               image: DecorationImage(
-                image: AssetImage(
-                  'assets/item2.png',
+                image: NetworkImage(
+                   'http://192.168.130.189:8000/${cart.product.galleries[0].url}',
                 ),
               ),
             ),
@@ -38,7 +41,7 @@ class CheckoutCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Asap Cair Luka',
+                  cart.product.name,
                   style: putihTextStyle.copyWith(
                     fontWeight: semiBold,
                   ),
@@ -47,14 +50,14 @@ class CheckoutCard extends StatelessWidget {
                   height: 2,
                 ),
                 Text(
-                  '\Rp.20000',
+                  '\Rp${cart.product.price}',
                   style: putihTextStyle,
                 ),
               ],
             ),
           ),
           Text(
-            '2 Item',
+            '${cart.quantity} Item',
             style: putihTextStyle.copyWith(
               fontSize: 12,
             ),
